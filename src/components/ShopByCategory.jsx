@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa";
 import DataContext from '../context/DataContext'
 import { items } from '../context/Data';
+import All_Products from './All_Products';
 
 const categories = [
   { name: "All Products", icon: <FaThLarge /> },
@@ -25,6 +26,18 @@ const ShopByCategory = () => {
   const {setProducts} = useContext(DataContext);
 
   const [selectedPrice , setSelectedPrice] = useState(80000);
+
+  const filterByCategory = (cat) =>{
+    if(cat == "All_Products"){
+      setProducts(items)
+      return
+    }
+    setProducts(items.filter(pro=>pro.category.toLowerCase()===cat.toLowerCase()))
+  }
+
+  const filterByPrice = (price) =>{
+    setProducts(items.filter(pro=>pro.price <= price))
+  }
   return (
     <>
       <div className="container bg-dark text-light my-4 p-4 rounded shadow-lg">
@@ -40,6 +53,14 @@ const ShopByCategory = () => {
             {icon} <span>{name}</span>
           </div>
         ))}
+        </div>
+
+        <div className='d-flex flex-wrap justify-content-center gap-3'>
+          {priceRanges.map((value) => (
+            <span key={value} onClick={()=> filterByPrice(value)} className={`badge p-3 fw-bold ${selectedPrice === value ? "bg-warning text-dark" : "bg-light text-dark"}`} style={{cursor: "pointer" , fontSize: "1rem", borderRadius:'10px'}}>
+              <FaRupeeSign />{value}
+            </span>
+          ))}
         </div>
       </div>
     </>
